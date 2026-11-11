@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Voxel Office</title>
+    <style>
+        body { margin: 0; background: #030712; color: #00f0ff; font-family: monospace; text-align: center; overflow: hidden; }
+        #info { position: absolute; top: 15px; width: 100%; font-weight: bold; font-size: 13px; text-shadow: 0 0 10px #00f0ff; letter-spacing: 2px; z-index: 10; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="info">⚡ CYBER VOXEL OFFICE // 3 KARYAWAN ⚡</div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x030712);
+        scene.fog = new THREE.FogExp2(0x030712, 0.08);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Pencahayaan Nuansa Cyber (Cyan & Pink Neon)
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const lightCyan = new THREE.PointLight(0x00f0ff, 2, 10);
+        lightCyan.position.set(0, 3, 0);
+        scene.add(lightCyan);
+
+        const lightPink = new THREE.PointLight(0xff007f, 2, 10);
+        lightPink.position.set(-2, 2, 2);
+        scene.add(lightPink);
+
+        const officeGroup = new THREE.Group();
+
+        // Lantai Grid Voxel (Kotak-kotak ala Minecraft)
+        const floorGeo = new THREE.BoxGeometry(0.95, 0.1, 0.95);
+        for(let x = -3; x <= 3; x++) {
+            for(let z = -3; z <= 3; z++) {
+                let color = ((x + z) % 2 === 0) ? 0x0f172a : 0x1e293b;
+                const tileMat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
+                const tile = new THREE.Mesh(floorGeo, tileMat);
+                tile.position.set(x * 1.0, -0.5, z * 1.0);
+                officeGroup.add(tile);
+            }
+        }
+
+        // Material Gaya Cube Game
+        const deskMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.4 });
+        const neonCyanMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+        const neonPinkMat = new THREE.MeshBasicMaterial({ color: 0xff007f });
+        const neonGreenMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+
+        // Meja Utama Voxel
+        const deskTop = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.2, 1.0), deskMat);
+        deskTop.position.set(0, 0, 0);
+        officeGroup.add(deskTop);
+
+        // Kaki Meja
+        const leg1 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), deskMat);
+        leg1.position.set(-0.9, -0.4, 0.3);
+        const leg2 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), deskMat);
+        leg2.position.set(0.9, -0.4, 0.3);
+        officeGroup.add(leg1);
+        officeGroup.add(leg2);
+
+        // Membuat Karakter Karyawan Voxel (Cube Style)
+        function createVoxelWorker(neonColor, x, z) {
+            const worker = new THREE.Group();
+            
+            // Badan Kotak
+            const body = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.4, 0.25), new THREE.MeshStandardMaterial({color: 0x1e293b}));
+            body.position.set(0, 0.2, 0);
+            
+            // Kepala Kotak
+            const head = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.3, 0.3), new THREE.MeshStandardMaterial({color: 0xfbbf24}));
+            head.position.set(0, 0.55, 0);
+
+            // Lampu / ID Neon di Badan
+            const badge = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.1, 0.05), neonColor);
+            badge.position.set(0, 0.2, 0.13);
+
+            worker.add(body);
+            worker.add(head);
+            worker.add(badge);
+            worker.position.set(x, 0, z);
+            return worker;
+        }
+
+        // 3 Karyawan: Tukang Riset (Cyan), Editor (Pink), Upload (Green)
+        const workerRiset = createVoxelWorker(neonCyanMat, -0.7, -0.2);
+        const workerEditor = createVoxelWorker(neonPinkMat, 0, -0.2);
+        const workerUpload = createVoxelWorker(neonGreenMat, 0.7, -0.2);
+
+        officeGroup.add(workerRiset);
+        officeGroup.add(workerEditor);
+        officeGroup.add(workerUpload);
+
+        // Rak Server Cyber Voxel di Belakang
+        for(let i = -1.5; i <= 1.5; i += 1.5) {
+            const server = new THREE.Mesh(new THREE.BoxGeometry(0.7, 1.8, 0.7), deskMat);
+            server.position.set(i, 0.4, -2.2);
+            officeGroup.add(server);
+
+            // Garis Neon Server
+            const strip = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.05, 0.05), neonCyanMat);
+            strip.position.set(i, 1.0, -1.82);
+            officeGroup.add(strip);
+        }
+
+        scene.add(officeGroup);
+
+        camera.position.set(0, 1.8, 3.8);
+        camera.lookAt(0, 0, -0.5);
+
+        // Animasi Bergaya Voxel Retro
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            let time = clock.getElapsedTime();
+
+            // Efek gerakan kecil robot/karyawan cube
+            workerRiset.position.y = Math.sin(time * 5) * 0.03;
+            workerEditor.position.y = Math.cos(time * 5) * 0.03;
+            workerUpload.position.y = Math.sin(time * 6) * 0.03;
+
+            // Rotasi pelan seluruh ruangan kantor cyberpunk
+            officeGroup.rotation.y = Math.sin(time * 0.15) * 0.25;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
