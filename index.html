@@ -3,158 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pixel Art Clipper HQ</title>
+    <title>Hypnos Clipper Pixel HQ</title>
     <style>
-        body { margin: 0; background: #090d16; color: #38bdf8; font-family: monospace; overflow: hidden; }
-        #header { position: absolute; top: 10px; width: 100%; text-align: center; font-size: 11px; font-weight: bold; text-shadow: 0 0 8px #00f0ff; z-index: 10; letter-spacing: 1px; }
-        
-        /* Terminal Perintah Interaktif */
-        #control-panel {
-            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; background: rgba(15, 23, 42, 0.95);
-            border: 1px solid #00f0ff; border-radius: 8px; padding: 10px; z-index: 10;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); text-align: center;
+        body {
+            margin: 0;
+            background: #090d16;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        input { width: 68%; padding: 8px; background: #020617; border: 1px solid #334155; color: white; border-radius: 4px; font-size: 12px; outline: none; }
-        button { padding: 8px 12px; background: #00f0ff; border: none; font-weight: bold; color: #020617; border-radius: 4px; cursor: pointer; font-size: 12px; }
-        #log { margin-top: 6px; font-size: 10px; color: #10b981; height: 16px; overflow: hidden; }
-        canvas { display: block; width: 100vw; height: 100vh; }
+        h2 {
+            font-size: 14px;
+            color: #00f0ff;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0,240,255,0.5);
+            margin: 5px 0 15px 0;
+            letter-spacing: 1px;
+        }
+        /* Grid Layout Kantor (3 Ruangan) */
+        .hq-container {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .room-card {
+            background: #132238;
+            border: 2px solid #1e293b;
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .room-card:active {
+            transform: scale(0.98);
+            border-color: #00f0ff;
+        }
+        .avatar-box {
+            width: 60px;
+            height: 60px;
+            background: #090d16;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .room-info {
+            flex-grow: 1;
+        }
+        .room-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #f43f5e;
+            margin-bottom: 2px;
+        }
+        .room-desc {
+            font-size: 10px;
+            color: #94a3b8;
+            line-height: 1.3;
+        }
+        /* Terminal Kontrol */
+        .terminal {
+            width: 100%;
+            max-width: 450px;
+            margin-top: 15px;
+            background: #020617;
+            border: 2px solid #00f0ff;
+            border-radius: 8px;
+            padding: 12px;
+            box-sizing: border-box;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+        .terminal-title {
+            font-size: 11px;
+            color: #00f0ff;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+        input {
+            flex-grow: 1;
+            padding: 8px;
+            background: #090d16;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            outline: none;
+        }
+        button {
+            padding: 8px 14px;
+            background: #00f0ff;
+            border: none;
+            font-weight: bold;
+            color: #020617;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        #log {
+            margin-top: 8px;
+            font-size: 10px;
+            color: #10b981;
+            min-height: 15px;
+        }
     </style>
 </head>
 <body>
-    <div id="header">🕹️ HYPNOS PIXEL HQ // 3 KARYAWAN AKTIF</div>
 
-    <div id="control-panel">
-        <div style="margin-bottom: 6px; font-size: 10px; color: #f43f5e; font-weight: bold;">TERMINAL KANTOR CLIPPER</div>
-        <input type="text" id="cmdInput" placeholder="Ketik perintah (cth: /riset /edit)...">
-        <button onclick="sendCommand()">Kirim</button>
-        <div id="log">Status: Menunggu instruksi operasional...</div>
+    <h2>🕹️ HYPNOS CLIPPER // PIXEL HQ</h2>
+
+    <div class="hq-container">
+        <!-- Ruang 1: Researcher -->
+        <div class="room-card" onclick="triggerTask('Researcher', 'Memindai tren & riset hook video...')">
+            <div class="avatar-box">🔬</div>
+            <div class="room-info">
+                <div class="room-title">1. RESEARCHER ROOM</div>
+                <div class="room-desc">Spesialis Riset: Analisis timestamp, bedah psikologi & hook 3 detik pertama.</div>
+            </div>
+        </div>
+
+        <!-- Ruang 2: Editor -->
+        <div class="room-card" onclick="triggerTask('Editor', 'Memotong klip & render vertikal 9:16...')">
+            <div class="avatar-box">🎧</div>
+            <div class="room-info">
+                <div class="room-title">2. EDITOR ROOM</div>
+                <div class="room-desc">Spesialis Video: Fast-cut otomatis, format 9:16 HD siap upload.</div>
+            </div>
+        </div>
+
+        <!-- Ruang 3: Uploader -->
+        <div class="room-card" onclick="triggerTask('Uploader', 'Menyiapkan paket caption & jadwal prime time...')">
+            <div class="avatar-box">🚀</div>
+            <div class="room-info">
+                <div class="room-title">3. UPLOADER ROOM</div>
+                <div class="room-desc">Spesialis Publikasi: Manajemen caption pemancing komentar & jadwal prime time.</div>
+            </div>
+        </div>
     </div>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Terminal Interaktif -->
+    <div class="terminal">
+        <div class="terminal-title">⚡ TERMINAL KOMANDO KANTOR</div>
+        <div class="input-group">
+            <input type="text" id="cmdInput" placeholder="Ketik perintah atau pilih ruangan di atas...">
+            <button onclick="sendCustomCmd()">Kirim</button>
+        </div>
+        <div id="log">Status: Markas siap menerima instruksi tugas...</div>
+    </div>
+
     <script>
-        // Setup Scene & Isometric Camera
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x090d16);
-        scene.fog = new THREE.FogExp2(0x090d16, 0.04);
-
-        const aspect = window.innerWidth / window.innerHeight;
-        const d = 6.5;
-        const camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
-        camera.position.set(18, 18, 18);
-        camera.lookAt(0, 0, 0);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        // Pencahayaan
-        scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-        const pointLight = new THREE.PointLight(0x00f0ff, 2, 20);
-        pointLight.position.set(0, 8, 0);
-        scene.add(pointLight);
-
-        const hqGroup = new THREE.Group();
-
-        // Material Ruangan & Karakter Pixel Style
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x132238, roughness: 0.8 });
-        const wallMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5 });
-        const deskMat = new THREE.MeshStandardMaterial({ color: 0x334155 });
-
-        // Dasar Lantai HQ
-        const baseFloor = new THREE.Mesh(new THREE.BoxGeometry(11, 0.3, 11), floorMat);
-        baseFloor.position.set(0, -0.3, 0);
-        hqGroup.add(baseFloor);
-
-        // Dinding Pembatas Ruangan (Layout 3 Ruangan)
-        const wall1 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1.8, 11), wallMat);
-        wall1.position.set(-1.2, 0.8, 0);
-        hqGroup.add(wall1);
-
-        const wall2 = new THREE.Mesh(new THREE.BoxGeometry(0.2, 1.8, 11), wallMat);
-        wall2.position.set(2.5, 0.8, 0);
-        hqGroup.add(wall2);
-
-        // --- 1. RESEARCHER ROOM (Kiri) ---
-        function buildResearcher() {
-            const group = new THREE.Group();
-            // Meja & Komputer Riset
-            const desk = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.15, 0.8), deskMat);
-            desk.position.set(-3.2, 0.1, -1.5);
-            // Karakter Researcher (Jas Lab Putih + Kacamata)
-            const body = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.4, 0.25), new THREE.MeshBasicMaterial({ color: 0xffffff }));
-            body.position.set(-3.2, 0.35, -1.5);
-            group.add(desk, body);
-            return group;
-        }
-
-        // --- 2. EDITOR ROOM (Tengah) ---
-        function buildEditor() {
-            const group = new THREE.Group();
-            // Meja & Multi-Monitor Editor
-            const desk = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.15, 0.9), deskMat);
-            desk.position.set(0.6, 0.1, -1.5);
-            // Karakter Editor (Kemeja Hijau Flanel + Headphone)
-            const body = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.4, 0.25), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
-            body.position.set(0.6, 0.35, -1.5);
-            group.add(desk, body);
-            return group;
-        }
-
-        // --- 3. UPLOADER ROOM & SERVER (Kanan) ---
-        function buildUploader() {
-            const group = new THREE.Group();
-            // Rak Server Industri
-            for(let i = -2; i <= 2; i += 1.3) {
-                const rack = new THREE.Mesh(new THREE.BoxGeometry(0.8, 1.5, 0.7), new THREE.MeshStandardMaterial({ color: 0x090d16 }));
-                rack.position.set(4.2, 0.6, i);
-                group.add(rack);
-            }
-            // Karakter Uploader (Hoodie Biru + Topi)
-            const body = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.4, 0.25), new THREE.MeshBasicMaterial({ color: 0x3b82f6 }));
-            body.position.set(4.2, 0.35, 1.5);
-            group.add(body);
-            return group;
-        }
-
-        hqGroup.add(buildResearcher());
-        hqGroup.add(buildEditor());
-        hqGroup.add(buildUploader());
-
-        scene.add(hqGroup);
-
-        // Fungsi Tombol Perintah
-        function sendCommand() {
-            const val = document.getElementById('cmdInput').value;
+        function triggerTask(role, actionText) {
             const log = document.getElementById('log');
-            if(!val) return;
+            log.style.color = "#00f0ff";
+            log.innerText = `⚙️ ${role} sedang bekerja: ${actionText}`;
             
-            log.innerText = "⚡ Memproses Perintah: " + val;
             setTimeout(() => {
-                log.innerText = "✓ Tim kantor berhasil mengeksekusi tugas!";
-                document.getElementById('cmdInput').value = "";
+                log.style.color = "#10b981";
+                log.innerText = `✓ Tugas ${role} selesai dieksekusi dengan sukses!`;
             }, 1200);
         }
 
-        // Animasi Putar Isometrik
-        let clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            let time = clock.getElapsedTime();
-            hqGroup.rotation.y = time * 0.12; // Rotasi pelan elegan
-            renderer.render(scene, camera);
-        }
-        animate();
+        function sendCustomCmd() {
+            const val = document.getElementById('cmdInput').value;
+            const log = document.getElementById('log');
+            if(!val) return;
 
-        window.addEventListener('resize', () => {
-            const aspect = window.innerWidth / window.innerHeight;
-            camera.left = -d * aspect;
-            camera.right = d * aspect;
-            camera.top = d;
-            camera.bottom = -d;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+            log.style.color = "#fbbf24";
+            log.innerText = `⚡ Menjalankan perintah: "${val}"`;
+            
+            setTimeout(() => {
+                log.style.color = "#10b981";
+                log.innerText = `✓ Perintah berhasil diproses oleh sistem kantor!`;
+                document.getElementById('cmdInput').value = "";
+            }, 1000);
+        }
     </script>
 </body>
 </html>
