@@ -6,241 +6,124 @@
     <title>Hypnos Pixel HQ Command Center</title>
     <style>
         body {
-            margin: 0;
-            background: #090d16;
-            color: #38bdf8;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            margin: 0; background: #090d16; color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace; padding: 10px;
+            display: flex; flex-direction: column; align-items: center;
         }
         .header {
-            width: 100%;
-            max-width: 480px;
-            background: #132238;
-            padding: 10px;
-            border-radius: 6px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-sizing: border-box;
-            border: 1px solid #1e293b;
-            margin-bottom: 10px;
+            width: 100%; max-width: 480px; background: #132238; padding: 10px;
+            border-radius: 6px; display: flex; justify-content: space-between;
+            align-items: center; box-sizing: border-box; border: 1px solid #1e293b; margin-bottom: 10px;
         }
         .title { font-size: 11px; font-weight: bold; color: #00f0ff; }
         .audio-btn {
             background: #f43f5e; border: none; color: white; padding: 4px 8px;
             font-size: 9px; font-weight: bold; border-radius: 4px; cursor: pointer;
         }
-        /* Layout 3 Ruangan Berdampingan */
         .rooms-grid {
-            width: 100%;
-            max-width: 480px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-bottom: 10px;
+            width: 100%; max-width: 480px; display: grid;
+            grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 10px;
         }
         .room-card {
-            background: #0b132b;
-            border: 1px solid #1e293b;
-            border-radius: 6px;
-            padding: 8px 4px;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100px;
+            background: #0b132b; border: 1px solid #1e293b; border-radius: 6px;
+            padding: 8px 4px; text-align: center; display: flex; flex-direction: column;
+            align-items: center; min-height: 100px;
         }
         .room-title { font-size: 8px; color: #64748b; font-weight: bold; margin-bottom: 4px; }
         .worker-avatar { font-size: 20px; margin: 4px 0; }
         .worker-name { font-size: 9px; color: #fbbf24; font-weight: bold; }
         .status-badge {
-            font-size: 7px;
-            background: #1e293b;
-            color: #38bdf8;
-            padding: 2px 4px;
-            border-radius: 3px;
-            margin-top: 4px;
-            display: inline-block;
+            font-size: 7px; background: #1e293b; color: #38bdf8;
+            padding: 2px 4px; border-radius: 3px; margin-top: 4px; display: inline-block;
         }
-        .active-status { background: #f43f5e !important; color: #ffffff !important; font-weight: bold; animation: pulse 1s infinite; }
-        .done-status { background: #10b981 !important; color: #020617 !important; font-weight: bold; }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        /* Panel Kontrol & Input Link */
         .control-panel {
-            width: 100%;
-            max-width: 480px;
-            background: #020617;
-            border: 1px solid #00f0ff;
-            border-radius: 6px;
-            padding: 10px;
-            box-sizing: border-box;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            width: 100%; max-width: 480px; background: #020617;
+            border: 1px solid #00f0ff; border-radius: 6px; padding: 10px; box-sizing: border-box;
         }
         .panel-title { font-size: 10px; color: #f43f5e; font-weight: bold; margin-bottom: 6px; }
         input {
-            width: 100%;
-            padding: 8px;
-            background: #090d16;
-            border: 1px solid #334155;
-            color: white;
-            border-radius: 4px;
-            font-size: 11px;
-            outline: none;
-            box-sizing: border-box;
-            margin-bottom: 6px;
+            width: 100%; padding: 8px; background: #090d16; border: 1px solid #334155;
+            color: white; border-radius: 4px; font-size: 11px; outline: none; box-sizing: border-box; margin-bottom: 6px;
         }
         button.action-btn {
-            width: 100%;
-            padding: 8px;
-            background: #00f0ff;
-            border: none;
-            font-weight: bold;
-            color: #020617;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
+            width: 100%; padding: 8px; background: #00f0ff; border: none;
+            font-weight: bold; color: #020617; border-radius: 4px; cursor: pointer; font-size: 11px;
         }
-        button.action-btn:active { background: #0284c7; }
         #processLog {
-            margin-top: 8px;
-            font-size: 9px;
-            color: #10b981;
-            line-height: 1.3;
-            background: #090d16;
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px dashed #334155;
-            min-height: 28px;
+            margin-top: 8px; font-size: 9px; color: #10b981; line-height: 1.3;
+            background: #090d16; padding: 6px; border-radius: 4px; border: 1px dashed #334155; min-height: 28px;
         }
     </style>
 </head>
 <body>
-
     <div class="header">
         <div class="title">🕹️ HYPNOS COMMAND CENTER</div>
         <button class="audio-btn" id="audioToggle" onclick="toggleAudio()">🎵 Musik Chill</button>
     </div>
-
-    <!-- Tampilan 3 Ruangan & Status Karyawan -->
     <div class="rooms-grid">
         <div class="room-card">
             <div class="room-title">1. RISET</div>
             <div class="worker-avatar">🔬</div>
             <div class="worker-name">Researcher</div>
-            <div class="status-badge" id="badgeRes">STANDBY</div>
+            <div class="status-badge">READY</div>
         </div>
         <div class="room-card">
             <div class="room-title">2. EDITOR</div>
             <div class="worker-avatar">🎧</div>
             <div class="worker-name">Editor</div>
-            <div class="status-badge" id="badgeEdt">STANDBY</div>
+            <div class="status-badge">READY</div>
         </div>
         <div class="room-card">
             <div class="room-title">3. UPLOADER</div>
             <div class="worker-avatar">🚀</div>
             <div class="worker-name">Uploader</div>
-            <div class="status-badge" id="badgeUpl">STANDBY</div>
+            <div class="status-badge">READY</div>
         </div>
     </div>
-
-    <!-- Panel Input & Live Status Proses -->
     <div class="control-panel">
         <div class="panel-title">⚡ MASUKKAN LINK YOUTUBE TARGET</div>
         <input type="text" id="ytLink" placeholder="Tempel link YouTube di sini...">
         <button class="action-btn" onclick="submitVideoLink()">Mulai Produksi 5 Klip</button>
         <div id="processLog">Status: Sistem siap menerima perintah tugas...</div>
     </div>
-
     <script>
         function submitVideoLink() {
             const url = document.getElementById('ytLink').value;
             const log = document.getElementById('processLog');
-            
             if(!url) {
                 log.style.color = "#f43f5e";
                 log.innerText = "❌ Masukkan link YouTube terlebih dahulu!";
                 return;
             }
-
             log.style.color = "#00f0ff";
-            log.innerText = "⏳ Mengirim tautan ke sistem bot di Termux...";
-
-            // Jalankan animasi visual progres kerja tim
-            runWorkflowAnimation();
-
-            // Kirim data link otomatis ke Bot Telegram
+            log.innerText = "⏳ Mengirim tautan ke bot Telegram...";
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.sendData(url);
+                window.Telegram.WebApp.close();
+            } else {
+                log.style.color = "#f43f5e";
+                log.innerText = "❌ Harap buka melalui Telegram!";
             }
         }
-
-        function runWorkflowAnimation() {
-            const badgeRes = document.getElementById('badgeRes');
-            const badgeEdt = document.getElementById('badgeEdt');
-            const badgeUpl = document.getElementById('badgeUpl');
-            const log = document.getElementById('processLog');
-
-            // Reset badge
-            badgeRes.className = "status-badge"; badgeRes.innerText = "STANDBY";
-            badgeEdt.className = "status-badge"; badgeEdt.innerText = "STANDBY";
-            badgeUpl.className = "status-badge"; badgeUpl.innerText = "STANDBY";
-
-            // Tahap 1: Researcher Beraksi
-            setTimeout(() => {
-                badgeRes.className = "status-badge active-status";
-                badgeRes.innerText = "WORKING";
-                log.style.color = "#fbbf24";
-                log.innerText = "📥 [Tahap 1/3] Researcher sedang mendownload video dari YouTube...";
-            }, 600);
-
-            // Tahap 2: Editor Beraksi
-            setTimeout(() => {
-                badgeRes.className = "status-badge done-status"; badgeRes.innerText = "DONE";
-                badgeEdt.className = "status-badge active-status";
-                badgeEdt.innerText = "RENDERING";
-                log.style.color = "#38bdf8";
-                log.innerText = "⚙️ [Tahap 2/3] Editor memotong & merender 5 klip vertikal 9:16...";
-            }, 4000);
-
-            // Tahap 3: Uploader Beraksi
-            setTimeout(() => {
-                badgeEdt.className = "status-badge done-status"; badgeEdt.innerText = "DONE";
-                badgeUpl.className = "status-badge active-status";
-                badgeUpl.innerText = "SENDING";
-                log.style.color = "#10b981";
-                log.innerText = "🚀 [Tahap 3/3] Uploader mengirim hasil video ke chat Telegram...";
-            }, 9000);
-
-            // Selesai
-            setTimeout(() => {
-                badgeUpl.className = "status-badge done-status"; badgeUpl.innerText = "DONE";
-                log.style.color = "#10b981";
-                log.innerText = "✅ Semua proses selesai! Silakan cek chat Telegram Anda.";
-            }, 13000);
-        }
-
-        // Audio Chill Lo-Fi Chiptune Generator
-        let audioCtx = null;
-        let isPlaying = false;
-        let synthInterval = null;
-
+        let audioCtx = null, isPlaying = false, synthInterval = null;
         function toggleAudio() {
             const btn = document.getElementById('audioToggle');
             if (!isPlaying) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 isPlaying = true;
-                btn.innerText = "🔇 Matikan Musik";
+                btn.innerText = "🔇 Matikan";
                 btn.style.background = "#10b981";
-                startChillChiptune();
+                synthInterval = setInterval(() => {
+                    if (!isPlaying || !audioCtx) return;
+                    let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    let notes = [261.63, 293.66, 329.63, 392.00, 440.00];
+                    osc.frequency.setValueAtTime(notes[Math.floor(Math.random()*notes.length)], audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.8);
+                }, 600);
             } else {
                 if (synthInterval) clearInterval(synthInterval);
                 if (audioCtx) audioCtx.close();
@@ -248,24 +131,6 @@
                 btn.innerText = "🎵 Musik Chill";
                 btn.style.background = "#f43f5e";
             }
-        }
-
-        function startChillChiptune() {
-            const notes = [261.63, 293.66, 329.63, 392.00, 440.00]; 
-            synthInterval = setInterval(() => {
-                if (!isPlaying || !audioCtx) return;
-                let osc = audioCtx.createOscillator();
-                let gain = audioCtx.createGain();
-                osc.type = 'triangle'; 
-                let note = notes[Math.floor(Math.random() * notes.length)];
-                osc.frequency.setValueAtTime(note, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.8);
-            }, 600);
         }
     </script>
 </body>
