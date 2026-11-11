@@ -3,194 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hypnos Clipper Pixel HQ</title>
+    <title>Hypnos Pixel Office Live</title>
     <style>
         body {
             margin: 0;
             background: #090d16;
             color: #38bdf8;
             font-family: 'Courier New', Courier, monospace;
-            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow: hidden;
         }
-        h2 {
-            font-size: 14px;
-            color: #00f0ff;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(0,240,255,0.5);
-            margin: 5px 0 15px 0;
-            letter-spacing: 1px;
-        }
-        /* Grid Layout Kantor (3 Ruangan) */
-        .hq-container {
+        #top-bar {
             width: 100%;
-            max-width: 450px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .room-card {
             background: #132238;
-            border: 2px solid #1e293b;
-            border-radius: 8px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .room-card:active {
-            transform: scale(0.98);
-            border-color: #00f0ff;
-        }
-        .avatar-box {
-            width: 60px;
-            height: 60px;
-            background: #090d16;
-            border: 2px solid #334155;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        .room-info {
-            flex-grow: 1;
-        }
-        .room-title {
-            font-size: 12px;
-            font-weight: bold;
-            color: #f43f5e;
-            margin-bottom: 2px;
-        }
-        .room-desc {
-            font-size: 10px;
-            color: #94a3b8;
-            line-height: 1.3;
-        }
-        /* Terminal Kontrol */
-        .terminal {
-            width: 100%;
-            max-width: 450px;
-            margin-top: 15px;
-            background: #020617;
-            border: 2px solid #00f0ff;
-            border-radius: 8px;
-            padding: 12px;
-            box-sizing: border-box;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
-        }
-        .terminal-title {
-            font-size: 11px;
-            color: #00f0ff;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        .input-group {
-            display: flex;
-            gap: 8px;
-        }
-        input {
-            flex-grow: 1;
             padding: 8px;
-            background: #090d16;
-            border: 1px solid #334155;
-            color: white;
-            border-radius: 4px;
-            font-size: 12px;
-            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+            border-bottom: 2px solid #1e293b;
         }
-        button {
-            padding: 8px 14px;
-            background: #00f0ff;
-            border: none;
-            font-weight: bold;
-            color: #020617;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
+        .title { font-size: 11px; font-weight: bold; color: #00f0ff; letter-spacing: 1px; }
+        .audio-btn {
+            background: #f43f5e; border: none; color: white; padding: 4px 8px;
+            font-size: 10px; font-weight: bold; border-radius: 4px; cursor: pointer;
         }
-        #log {
-            margin-top: 8px;
-            font-size: 10px;
-            color: #10b981;
-            min-height: 15px;
+        canvas {
+            display: block;
+            background: #0b132b;
+            width: 100vw;
+            max-width: 500px;
+            height: 380px;
+            border-bottom: 2px solid #1e293b;
         }
+        #terminal {
+            width: 100%;
+            max-width: 500px;
+            background: #020617;
+            padding: 10px;
+            box-sizing: border-box;
+            border-top: 1px solid #00f0ff;
+        }
+        .term-title { font-size: 10px; color: #f43f5e; font-weight: bold; margin-bottom: 4px; }
+        #log { font-size: 10px; color: #10b981; height: 20px; overflow: hidden; }
     </style>
 </head>
 <body>
 
-    <h2>🕹️ HYPNOS CLIPPER // PIXEL HQ</h2>
-
-    <div class="hq-container">
-        <!-- Ruang 1: Researcher -->
-        <div class="room-card" onclick="triggerTask('Researcher', 'Memindai tren & riset hook video...')">
-            <div class="avatar-box">🔬</div>
-            <div class="room-info">
-                <div class="room-title">1. RESEARCHER ROOM</div>
-                <div class="room-desc">Spesialis Riset: Analisis timestamp, bedah psikologi & hook 3 detik pertama.</div>
-            </div>
-        </div>
-
-        <!-- Ruang 2: Editor -->
-        <div class="room-card" onclick="triggerTask('Editor', 'Memotong klip & render vertikal 9:16...')">
-            <div class="avatar-box">🎧</div>
-            <div class="room-info">
-                <div class="room-title">2. EDITOR ROOM</div>
-                <div class="room-desc">Spesialis Video: Fast-cut otomatis, format 9:16 HD siap upload.</div>
-            </div>
-        </div>
-
-        <!-- Ruang 3: Uploader -->
-        <div class="room-card" onclick="triggerTask('Uploader', 'Menyiapkan paket caption & jadwal prime time...')">
-            <div class="avatar-box">🚀</div>
-            <div class="room-info">
-                <div class="room-title">3. UPLOADER ROOM</div>
-                <div class="room-desc">Spesialis Publikasi: Manajemen caption pemancing komentar & jadwal prime time.</div>
-            </div>
-        </div>
+    <div id="top-bar">
+        <div class="title">🕹️ HYPNOS LIVE OFFICE</div>
+        <button class="audio-btn" id="audioToggle" onclick="toggleAudio()">🎵 Nyalakan Musik Chill</button>
     </div>
 
-    <!-- Terminal Interaktif -->
-    <div class="terminal">
-        <div class="terminal-title">⚡ TERMINAL KOMANDO KANTOR</div>
-        <div class="input-group">
-            <input type="text" id="cmdInput" placeholder="Ketik perintah atau pilih ruangan di atas...">
-            <button onclick="sendCustomCmd()">Kirim</button>
-        </div>
-        <div id="log">Status: Markas siap menerima instruksi tugas...</div>
+    <!-- Canvas Simulasi Pixel Karyawan Berjalan -->
+    <canvas id="officeCanvas" width="500" height="380"></canvas>
+
+    <div id="terminal">
+        <div class="term-title">⚡ STATUS KARYAWAN REAL-TIME</div>
+        <div id="log">Sistem aktif: Karyawan sedang memproses tugas di ruangan masing-masing...</div>
     </div>
 
     <script>
-        function triggerTask(role, actionText) {
-            const log = document.getElementById('log');
-            log.style.color = "#00f0ff";
-            log.innerText = `⚙️ ${role} sedang bekerja: ${actionText}`;
-            
-            setTimeout(() => {
-                log.style.color = "#10b981";
-                log.innerText = `✓ Tugas ${role} selesai dieksekusi dengan sukses!`;
-            }, 1200);
+        const canvas = document.getElementById('officeCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // --- 1. DATA 3 KARYAWAN & RUANGAN ---
+        const workers = [
+            { name: "Researcher", room: "RISET ROOM", x: 80, y: 100, minX: 40, maxX: 160, speed: 0.4, color: "#fbbf24", status: "Memindai Hook & Tren..." },
+            { name: "Editor", room: "EDITOR ROOM", x: 250, y: 100, minX: 200, maxX: 310, speed: 0.5, color: "#38bdf8", status: "Merender Klip 9:16..." },
+            { name: "Uploader", room: "UPLOADER ROOM", x: 410, y: 100, minX: 360, maxX: 470, speed: 0.3, color: "#10b981", status: "Menjadwalkan Prime Time..." }
+        ];
+
+        // --- 2. LOOP ANIMASI KARYAWAN BERJALAN ---
+        function updateAndDraw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Gambar Denah 3 Ruangan
+            ctx.strokeStyle = "#1e293b";
+            ctx.lineWidth = 3;
+            ctx.strokeRect(20, 30, 140, 150); // Riset
+            ctx.strokeRect(180, 30, 140, 150); // Editor
+            ctx.strokeRect(340, 30, 140, 150); // Uploader
+
+            // Label Nama Ruangan
+            ctx.fillStyle = "#64748b";
+            ctx.font = "9px monospace";
+            ctx.fillText("🔬 RESEARCHER", 35, 50);
+            ctx.fillText("🎧 EDITOR", 215, 50);
+            ctx.fillText("🚀 UPLOADER", 355, 50);
+
+            // Render Karyawan (NPC Aktif)
+            workers.forEach(w => {
+                w.x += w.speed;
+                if (w.x > w.maxX || w.x < w.minX) {
+                    w.speed *= -1; 
+                }
+
+                // Meja Kerja Karyawan
+                ctx.fillStyle = "#334155";
+                ctx.fillRect(w.x - 20, 120, 40, 20);
+
+                // Karakter Pixel (Badan & Kepala)
+                ctx.fillStyle = w.color;
+                ctx.fillRect(w.x - 6, 95, 12, 16); 
+                ctx.fillStyle = "#f8fafc";
+                ctx.fillRect(w.x - 5, 85, 10, 10); 
+
+                // Teks Status di Atas Kepala
+                ctx.fillStyle = "#00f0ff";
+                ctx.font = "8px monospace";
+                ctx.textAlign = "center";
+                ctx.fillText(`[${w.name}]`, w.x, 75);
+
+                ctx.fillStyle = "#a5f3fc";
+                ctx.font = "7px monospace";
+                ctx.fillText(w.status, w.x, 65);
+            });
+
+            requestAnimationFrame(updateAndDraw);
+        }
+        updateAndDraw();
+
+        // --- 3. AUDIO CHILL PIXEL BGM (WEB AUDIO API SYNTH) ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let synthInterval = null;
+
+        function toggleAudio() {
+            const btn = document.getElementById('audioToggle');
+            if (!isPlaying) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                isPlaying = true;
+                btn.innerText = "🔇 Matikan Musik";
+                btn.style.background = "#10b981";
+                startChillChiptune();
+            } else {
+                if (synthInterval) clearInterval(synthInterval);
+                if (audioCtx) audioCtx.close();
+                isPlaying = false;
+                btn.innerText = "🎵 Nyalakan Musik Chill";
+                btn.style.background = "#f43f5e";
+            }
         }
 
-        function sendCustomCmd() {
-            const val = document.getElementById('cmdInput').value;
-            const log = document.getElementById('log');
-            if(!val) return;
+        function startChillChiptune() {
+            const notes = [261.63, 293.66, 329.63, 392.00, 440.00]; 
+            synthInterval = setInterval(() => {
+                if (!isPlaying || !audioCtx) return;
+                
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'triangle'; 
+                let note = notes[Math.floor(Math.random() * notes.length)];
+                osc.frequency.setValueAtTime(note, audioCtx.currentTime);
 
-            log.style.color = "#fbbf24";
-            log.innerText = `⚡ Menjalankan perintah: "${val}"`;
-            
-            setTimeout(() => {
-                log.style.color = "#10b981";
-                log.innerText = `✓ Perintah berhasil diproses oleh sistem kantor!`;
-                document.getElementById('cmdInput').value = "";
-            }, 1000);
+                gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.8);
+            }, 600);
         }
     </script>
 </body>
