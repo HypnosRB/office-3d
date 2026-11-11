@@ -37,6 +37,13 @@
             font-size: 7px; background: #1e293b; color: #38bdf8;
             padding: 2px 4px; border-radius: 3px; margin-top: 4px; display: inline-block;
         }
+        .active-status { background: #f43f5e !important; color: #ffffff !important; font-weight: bold; animation: pulse 1s infinite; }
+        .done-status { background: #10b981 !important; color: #020617 !important; font-weight: bold; }
+
+        @keyframes pulse {
+            0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; }
+        }
+
         .control-panel {
             width: 100%; max-width: 480px; background: #020617;
             border: 1px solid #00f0ff; border-radius: 6px; padding: 10px; box-sizing: border-box;
@@ -66,19 +73,19 @@
             <div class="room-title">1. RISET</div>
             <div class="worker-avatar">🔬</div>
             <div class="worker-name">Researcher</div>
-            <div class="status-badge">READY</div>
+            <div class="status-badge" id="badgeRes">READY</div>
         </div>
         <div class="room-card">
             <div class="room-title">2. EDITOR</div>
             <div class="worker-avatar">🎧</div>
             <div class="worker-name">Editor</div>
-            <div class="status-badge">READY</div>
+            <div class="status-badge" id="badgeEdt">READY</div>
         </div>
         <div class="room-card">
             <div class="room-title">3. UPLOADER</div>
             <div class="worker-avatar">🚀</div>
             <div class="worker-name">Uploader</div>
-            <div class="status-badge">READY</div>
+            <div class="status-badge" id="badgeUpl">READY</div>
         </div>
     </div>
     <div class="control-panel">
@@ -99,20 +106,53 @@
                 return;
             }
             log.style.color = "#00f0ff";
-            log.innerText = "⏳ Mengirim tautan ke bot Telegram...";
+            log.innerText = "⏳ Mengirim tautan & memulai progres tim...";
 
-            try {
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.sendData(url);
-                    window.Telegram.WebApp.close();
-                } else {
-                    log.style.color = "#10b981";
-                    log.innerText = "✅ Tautan diproses! Silakan kembali ke chat.";
-                }
-            } catch (err) {
-                log.style.color = "#10b981";
-                log.innerText = "✅ Perintah berhasil dikirim!";
+            runWorkflowAnimation();
+
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.sendData(url);
             }
+        }
+
+        function runWorkflowAnimation() {
+            const badgeRes = document.getElementById('badgeRes');
+            const badgeEdt = document.getElementById('badgeEdt');
+            const badgeUpl = document.getElementById('badgeUpl');
+            const log = document.getElementById('processLog');
+
+            badgeRes.className = "status-badge"; badgeRes.innerText = "READY";
+            badgeEdt.className = "status-badge"; badgeEdt.innerText = "READY";
+            badgeUpl.className = "status-badge"; badgeUpl.innerText = "READY";
+
+            setTimeout(() => {
+                badgeRes.className = "status-badge active-status";
+                badgeRes.innerText = "WORKING";
+                log.style.color = "#fbbf24";
+                log.innerText = "📥 [1/3] Researcher menganalisis transkrip & download...";
+            }, 600);
+
+            setTimeout(() => {
+                badgeRes.className = "status-badge done-status"; badgeRes.innerText = "DONE";
+                badgeEdt.className = "status-badge active-status";
+                badgeEdt.innerText = "RENDERING";
+                log.style.color = "#38bdf8";
+                log.innerText = "⚙️ [2/3] Editor memotong & merender 5 klip vertikal 9:16...";
+            }, 4000);
+
+            setTimeout(() => {
+                badgeEdt.className = "status-badge done-status"; badgeEdt.innerText = "DONE";
+                badgeUpl.className = "status-badge active-status";
+                badgeUpl.innerText = "SENDING";
+                log.style.color = "#10b981";
+                log.innerText = "🚀 [3/3] Uploader mengirim hasil video ke chat Telegram...";
+            }, 9000);
+
+            setTimeout(() => {
+                badgeUpl.className = "status-badge done-status"; badgeUpl.innerText = "DONE";
+                log.style.color = "#10b981";
+                log.innerText = "✅ Proses instruksi terkirim! Silakan cek chat Telegram Anda.";
+            }, 13000);
         }
 
         let audioCtx = null, isPlaying = false, synthInterval = null;
